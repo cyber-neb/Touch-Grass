@@ -1,3 +1,4 @@
+"""@author aeris"""
 import pygame
 import time
 import threading
