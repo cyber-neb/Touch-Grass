@@ -23,6 +23,7 @@ class TouchGrass:
         self.gps = 0  # Grass per second
         self.touch_power = 1  # Base touch power
         self.double_touch_unlocked = False  # Upgrade status
+        self.dopamine_recovery = 0  # Dopamine recovery percentage
         self.running = True
         self.start_gps_thread()
 
@@ -37,7 +38,12 @@ class TouchGrass:
 
     def click(self):
         self.grass += self.touch_power
+        self.update_dopamine()
 
+    def update_dopamine(self):
+        # Increases dopamine recovery by 1% every 5 clicks
+        self.dopamine_recovery = min(self.grass // 5, 100)  # Caps at 100%
+        
     def buy_upgrade(self):
         if self.grass >= 20 and not self.double_touch_unlocked:
             self.grass -= 20
@@ -49,8 +55,8 @@ class TouchGrass:
         pygame.display.set_caption("Touch Grass")
         clock = pygame.time.Clock()
 
-        button_rect = pygame.Rect(WIDTH // 2 - 75, HEIGHT // 2 - 25, 150, 50)
-        upgrade_rect = pygame.Rect(WIDTH // 2 - 75, HEIGHT // 2 + 50, 150, 50)
+        button_rect = pygame.Rect(WIDTH // 2 - 75, HEIGHT // 2 - 25, 175, 50)
+        upgrade_rect = pygame.Rect(WIDTH // 2 - 90, HEIGHT // 2 + 50, 200, 50)
 
         running = True
         while running:
@@ -70,22 +76,26 @@ class TouchGrass:
             # Draw button
             pygame.draw.rect(screen, GREEN, button_rect)
             text = FONT.render("Touch Grass", True, BLACK)
-            screen.blit(text, (button_rect.x + 2, button_rect.y + 10))
+            screen.blit(text, (button_rect.x + 10, button_rect.y + 10))
             
             # Display grass count
             grass_text = FONT.render(f"Grass Touched: {self.grass}", True, BLACK)
             screen.blit(grass_text, (WIDTH // 2 - 100, HEIGHT // 4))
 
+             # Display dopamine recovery
+            dopamine_text = FONT.render(f"Dopamine Recovered: {self.dopamine_recovery}%", True, BLACK)
+            screen.blit(dopamine_text, (WIDTH // 2 - 150, HEIGHT // 4 + 40))
+
             # Display upgrade button **only if player has at least 20 grass touched**
             if self.grass >= 20 and not self.double_touch_unlocked:
                 pygame.draw.rect(screen, GREEN, upgrade_rect)
                 upgrade_text = FONT.render("Two Hand Touch", True, BLACK)
-                screen.blit(upgrade_text, (upgrade_rect.x - 20, upgrade_rect.y + 10))
+                screen.blit(upgrade_text, (upgrade_rect.x + 2, upgrade_rect.y + 10))
 
             # Display upgrade status if unlocked
             if self.double_touch_unlocked:
                 upgrade_status_text = FONT.render(f"Two Hand Touch: Unlocked!", True, BLACK)
-                screen.blit(upgrade_status_text, (WIDTH // 2 - 150, HEIGHT // 4 + 40))
+                screen.blit(upgrade_status_text, (WIDTH // 2 - 150, HEIGHT // 4 + 150))
 
             pygame.display.flip()
             clock.tick(FPS)
