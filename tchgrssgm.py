@@ -3,10 +3,8 @@ import pygame
 import time
 import threading
 
-# Initialize Pygame
 pygame.init()
 
-# Constants
 WIDTH, HEIGHT = 500, 400
 WHITE = (255, 255, 255)
 GREEN = (34, 177, 76)
@@ -14,7 +12,6 @@ BLACK = (0, 0, 0)
 GRAY = (169, 169, 169)
 FPS = 60
 
-# Font
 pygame.font.init()
 FONT = pygame.font.Font(None, 36)
 
@@ -22,9 +19,9 @@ class TouchGrass:
     def __init__(self):
         self.grass = 0
         self.gps = 0  # Grass per second
-        self.touch_power = 1  # Base touch power
-        self.double_touch_unlocked = False  # Upgrade status
-        self.dopamine_recovery = 0  # Dopamine recovery percentage
+        self.touch_power = 1
+        self.double_touch_unlocked = False
+        self.dopamine_recovery = 0
         self.running = True
         self.start_gps_thread()
 
@@ -48,7 +45,7 @@ class TouchGrass:
     def buy_upgrade(self):
         if self.grass >= 20 and not self.double_touch_unlocked:
             self.grass -= 20
-            self.touch_power *= 2  # Double the touch power
+            self.touch_power *= 2 
             self.double_touch_unlocked = True
 
     def run(self):
@@ -63,7 +60,6 @@ class TouchGrass:
         while running:
             screen.fill(WHITE)
 
-            # Event handling
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -87,7 +83,7 @@ class TouchGrass:
             dopamine_text = FONT.render(f"Dopamine Recovered: {self.dopamine_recovery}%", True, BLACK)
             screen.blit(dopamine_text, (WIDTH // 2 - 150, HEIGHT // 4 + 40))
 
-            # Display upgrade button **only if player has at least 20 grass touched**
+            # Display upgrade button
             if self.grass >= 20 and not self.double_touch_unlocked:
                 pygame.draw.rect(screen, GREEN, upgrade_rect)
                 upgrade_text = FONT.render("Two Hand Touch", True, BLACK)
