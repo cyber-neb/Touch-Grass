@@ -15,7 +15,7 @@ GRAY = (169, 169, 169)
 FPS = 60
 
 # Font
-pygame.font.init
+pygame.font.init()
 FONT = pygame.font.Font(None, 36)
 
 class TouchGrass:
